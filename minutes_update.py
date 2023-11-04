@@ -348,7 +348,14 @@ class RecordingCt(Action):
 def makenames(aFirst, aLast, aDate, bFirst, bLast, bDate, book):
     """Return a poet/composer line with names and dates"""
     def namejoin(a, b):
-        return a + ' '  + b if a and b else a + b
+        if a is None and b is None:
+            return ''
+        elif a is None:
+            return b
+        elif b is None:
+            return a
+        else:    
+            return a + ' '  + b if a and b else a + b
     # Make book italic
     if book:
         # Check for "Name's Book Title" and don't italicize Name
