@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 33
-    buildToolsVersion "28.0.3"
 
     flavorDimensions "paid"
     productFlavors {
@@ -28,6 +27,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'org.fasola.fasolaminutes'
 }
 
 repositories {
