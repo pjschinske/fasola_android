@@ -7,7 +7,7 @@ android {
     productFlavors {
         free {
             dimension "paid"
-            applicationId "org.fasola.fasolaminutes"
+            applicationId "org.fasola.minutes"
         }
         paid {
             dimension "paid"
@@ -19,7 +19,7 @@ android {
         applicationId "org.fasola.minutes"
         minSdkVersion 15
         targetSdkVersion 33
-        versionCode 18
+        versionCode 19
         versionName "1.6"
     }
     buildTypes {
