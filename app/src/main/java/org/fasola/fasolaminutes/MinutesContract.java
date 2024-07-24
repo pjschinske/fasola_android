@@ -17,7 +17,7 @@ public class MinutesContract {
 
     public static final int DB_VERSION = 16;
     public static final int MIN_YEAR = 1995;
-    public static final int MAX_YEAR = 2022;
+    public static final int MAX_YEAR = 2023;
     public static final int SONG_COUNT = 554;
     public static final String DB_NAME = "minutes.db";
 
