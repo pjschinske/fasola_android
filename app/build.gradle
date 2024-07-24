@@ -16,6 +16,7 @@ android {
     }
 
     defaultConfig {
+        applicationId "org.fasola.minutes"
         minSdkVersion 15
         targetSdkVersion 33
         versionCode 18
@@ -27,7 +28,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'org.fasola.minutes'
+    namespace 'org.fasola.fasolaminutes'
 }
 
 repositories {
