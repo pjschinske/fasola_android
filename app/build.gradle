@@ -27,7 +27,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'org.fasola.fasolaminutes'
+    namespace 'org.fasola.minutes'
 }
 
 repositories {
