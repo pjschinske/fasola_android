@@ -6,7 +6,7 @@
 package org.fasola.fasolaminutes;
 
 import android.database.Cursor;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * An indexer with sections between a range of integers.
