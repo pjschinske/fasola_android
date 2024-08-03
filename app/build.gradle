@@ -19,7 +19,7 @@ android {
         applicationId "org.fasola.minutes"
         minSdkVersion 15
         targetSdkVersion 34
-        versionCode 24
+        versionCode 25
         versionName "1.6"
     }
     buildTypes {
