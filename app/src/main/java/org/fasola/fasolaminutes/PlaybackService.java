@@ -140,7 +140,13 @@ public class PlaybackService extends Service
         mObserver.registerBroadcastReceiver(getApplicationContext());
         mObserver.registerPlaylistObserver();
         ComponentName receiver = new ComponentName(getPackageName(), MediaButtonReceiver.class.getName());
-        mMediaSession = new MediaSessionCompat(this, "PlaybackService");
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext(),
+                0, new Intent(),
+                PendingIntent.FLAG_IMMUTABLE);
+
+        mMediaSession = new MediaSessionCompat(this, "PlaybackService", null, pendingIntent);
         mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
                 MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
         // Handle media buttons

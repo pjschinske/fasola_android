@@ -60,32 +60,33 @@ public class NowPlayingActivity extends SimpleTabActivity {
     PlaylistObserver mObserver = new PlaylistObserver() {
         @Override
         public void onChanged() {
-            mController.show(0); // Update seekbar
-            PlaybackService service = PlaybackService.getInstance();
-            Playlist.Song song;
-            if (service != null)
-                song = service.getSong();
-            else
-                song = Playlist.getInstance().getCurrent();
-            if (song != null) {
-                setTitle(song.name);
-                // Update fragments
-                if (song != mSong) {
-                    mSong = song;
-                    List<Fragment> fragments = getSupportFragmentManager().getFragments();
-                    if (fragments != null)
-                        for (Fragment fragment : fragments) {
-                            if (fragment instanceof SongActivity.SongFragment)
-                                ((SongActivity.SongFragment) fragment).setSongId(mSong.songId);
-                            else if (fragment instanceof NowPlayingInfoFragment)
-                                ((NowPlayingInfoFragment) fragment).setLeadId(mSong.leadId);
-                        }
+            if (mController != null) {
+                mController.show(0); // Update seekbar
+                PlaybackService service = PlaybackService.getInstance();
+                Playlist.Song song;
+                if (service != null)
+                    song = service.getSong();
+                else
+                    song = Playlist.getInstance().getCurrent();
+                if (song != null) {
+                    setTitle(song.name);
+                    // Update fragments
+                    if (song != mSong) {
+                        mSong = song;
+                        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                        if (fragments != null)
+                            for (Fragment fragment : fragments) {
+                                if (fragment instanceof SongActivity.SongFragment)
+                                    ((SongActivity.SongFragment) fragment).setSongId(mSong.songId);
+                                else if (fragment instanceof NowPlayingInfoFragment)
+                                    ((NowPlayingInfoFragment) fragment).setLeadId(mSong.leadId);
+                            }
+                    }
+                    setProgressBarIndeterminateVisibility(service != null && service.isLoading());
+                } else {
+                    mSong = null;
+                    setProgressBarIndeterminateVisibility(false);
                 }
-                setProgressBarIndeterminateVisibility(service != null && service.isLoading());
-            }
-            else {
-                mSong = null;
-                setProgressBarIndeterminateVisibility(false);
             }
         }
 
