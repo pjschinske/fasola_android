@@ -484,11 +484,11 @@ public class PlaybackService extends Service
         RemoteViews remote = new RemoteViews(getPackageName(), R.layout.notification_playback);
         Intent playIntent = new Intent(ACTION_PLAY_PAUSE, null, this, PlaybackService.class);
         remote.setOnClickPendingIntent(R.id.play_pause, PendingIntent.getService(
-                this, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                this, 0, playIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         ));
         Intent nextIntent = new Intent(ACTION_NEXT, null, this, PlaybackService.class);
         remote.setOnClickPendingIntent(R.id.next, PendingIntent.getService(
-                this, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                this, 0, nextIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         ));
         Intent closeIntent = new Intent(ACTION_CLOSE, null, this, PlaybackService.class);
         remote.setOnClickPendingIntent(R.id.close, PendingIntent.getService(
@@ -497,7 +497,7 @@ public class PlaybackService extends Service
         // Main Notification Intent
         Intent intent = new Intent(this, NowPlayingActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(
-                this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
+                this, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         );
         // Build Notification
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
@@ -572,14 +572,14 @@ public class PlaybackService extends Service
                 // Launch NowPlayingActivity normally
                 Intent intent = new Intent(this, NowPlayingActivity.class);
                 notification.contentIntent = PendingIntent.getActivity(
-                        this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        this, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
             }
             else {
                 // Synthesize stack MainActivity -> NowPlayingActivity
                 TaskStackBuilder stack = TaskStackBuilder.create(getApplicationContext());
                 stack.addNextIntent(new Intent(this, MainActivity.class));
                 stack.addNextIntent(new Intent(this, NowPlayingActivity.class));
-                notification.contentIntent = stack.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                notification.contentIntent = stack.getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
             }
         }
         else {
@@ -593,7 +593,7 @@ public class PlaybackService extends Service
             Intent intent = new Intent(
                     ConnectionStatus.ACTION_PLAY, null, this, PlaybackService.class);
             notification.contentIntent = PendingIntent.getService(
-                    this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    this, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         }
         // Show or update notification
         if (mNotification == null) {
