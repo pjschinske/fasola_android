@@ -486,7 +486,7 @@ public class PlaybackService extends Service
         ));
         Intent closeIntent = new Intent(ACTION_CLOSE, null, this, PlaybackService.class);
         remote.setOnClickPendingIntent(R.id.close, PendingIntent.getService(
-                this, 0, closeIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                this, 0, closeIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         ));
         // Main Notification Intent
         Intent intent = new Intent(this, NowPlayingActivity.class);
