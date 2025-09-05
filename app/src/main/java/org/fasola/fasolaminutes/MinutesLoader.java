@@ -25,12 +25,9 @@ interface _MinutesLoaderCallbacksInterface {
     void onLoadFinished(Cursor cursor);
     void onLoaderReset();
 }
-
 public class MinutesLoader implements LoaderManager.LoaderCallbacks<Cursor>,
                                       Loader.OnLoadCompleteListener<Cursor>,
                                       _MinutesLoaderCallbacksInterface {
-    private static final boolean DEBUG_QUERIES = true && BuildConfig.DEBUG;
-
     public interface Callbacks extends _MinutesLoaderCallbacksInterface {
     }
 
@@ -93,15 +90,8 @@ public class MinutesLoader implements LoaderManager.LoaderCallbacks<Cursor>,
             // The query isn't executed until data is accessed in some way.
             // Since the whole point of using a cursor loader is to do the heavy lifting in
             // the background, we force the query to execute here.
-            if (! DEBUG_QUERIES)
-                cursor.getCount();
-            else {
-                long start = nanoTime();
-                Log.v("SQL", mLoader.getQuery().toString());
-                Log.v("SQL", "Query length: " + mLoader.getQuery().toString().length());
-                cursor.getCount();
-                Log.v("SQL", "query time (secs): " + (nanoTime() - start)/1000000000.);
-            }
+            cursor.getCount();
+
             return cursor;
         }
     }

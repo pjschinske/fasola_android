@@ -137,17 +137,16 @@ public class SingingActivity extends SimpleTabActivity {
         @Override
         public SQL.Query onUpdateQuery() {
             // Order
-            switch (getSortId()) {
-                case R.id.menu_singing_song_sort_leader:
-                    showHeaders(true);
-                    setAlphabetIndexer();
-                    return leaderQuery().sectionIndex(C.Leader.lastName)
-                                .order(C.Leader.lastName, "ASC", C.Leader.fullName, "ASC");
-                case R.id.menu_singing_song_sort_page:
-                    showHeaders(false);
-                    return standardQuery().order(C.Song.pageSort, "ASC");
-                case R.id.menu_singing_song_sort_order:
-                default:
+            int sortId = getSortId();
+            if (sortId == R.id.menu_singing_song_sort_leader) {
+                showHeaders(true);
+                setAlphabetIndexer();
+                return leaderQuery().sectionIndex(C.Leader.lastName)
+                        .order(C.Leader.lastName, "ASC", C.Leader.fullName, "ASC");
+            } else if (sortId == R.id.menu_singing_song_sort_page) {
+                showHeaders(false);
+                return standardQuery().order(C.Song.pageSort, "ASC");
+            } else {
                     showHeaders(false);
                     return standardQuery().order(C.SongLeader.singingOrder, "ASC");
             }
@@ -155,11 +154,10 @@ public class SingingActivity extends SimpleTabActivity {
 
         @Override
         public SQL.Query onUpdateSearch(SQL.Query query, String searchTerm) {
-            switch (getSortId()) {
-                case R.id.menu_singing_song_sort_leader:
-                    return query.where(C.Leader.fullName, "LIKE", "%" + searchTerm + "%")
-                                .or(C.Song.fullName, "LIKE", "%" + searchTerm + "%");
-                default:
+            if (getSortId() == R.id.menu_singing_song_sort_leader) {
+                return query.where(C.Leader.fullName, "LIKE", "%" + searchTerm + "%")
+                        .or(C.Song.fullName, "LIKE", "%" + searchTerm + "%");
+            } else {
                     // having since Leader.allNames is a group_concat
                     return query.having(C.Leader.allNames, "LIKE", "%" + searchTerm + "%")
                                 .or(C.Song.fullName, "LIKE", "%" + searchTerm + "%");

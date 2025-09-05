@@ -61,7 +61,11 @@ public class NowPlayingActivity extends SimpleTabActivity {
         @Override
         public void onChanged() {
             if (mController != null) {
-                mController.show(0); // Update seekbar
+                try {
+                    mController.show(0); // Update seekbar
+                } catch(NullPointerException npe) {
+                    // just catch this for now since it's unclear what's null
+                }
                 PlaybackService service = PlaybackService.getInstance();
                 Playlist.Song song;
                 if (service != null)

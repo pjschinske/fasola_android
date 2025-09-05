@@ -134,34 +134,32 @@ public class MainActivity extends SimpleTabActivity {
 
         @Override
         public SQL.Query onUpdateQuery() {
-            switch(mSortId) {
-                case R.id.menu_leader_sort_count:
-                    setBinCount(7);
-                    showHeaders(false);
-                    return C.Leader.selectList(C.Leader.fullName, C.Leader.leadCount)
-                                   .sectionIndex(C.Leader.leadCount, "DESC")
-                                   .order(C.Leader.lastName, "ASC", C.Leader.fullName, "ASC");
-                case R.id.menu_leader_sort_entropy:
-                    setBins(0, 10, 20, 30, 40, 50, 60, 70, 80, 90);
-                    setSectionLabels("0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9");
-                    showHeaders(false);
-                    return C.Leader.selectList(C.Leader.fullName, C.Leader.entropyDisplay)
-                                   .sectionIndex(C.Leader.entropy.format("CAST({column} * 100 AS INT)"), "DESC")
-                                   .order(C.Leader.entropy, "DESC",
-                                           C.Leader.lastName, "ASC",
-                                           C.Leader.fullName, "ASC");
-                case R.id.menu_leader_sort_first_name:
-                    setAlphabetIndexer();
-                    showHeaders(true);
-                    return C.Leader.selectList(C.Leader.fullName, C.Leader.leadCount)
-                                   .sectionIndex(C.Leader.fullName, "ASC");
-                case R.id.menu_leader_sort_name:
-                default:
-                    setAlphabetIndexer();
-                    showHeaders(true);
-                    return C.Leader.selectList(C.Leader.fullName, C.Leader.leadCount)
-                                   .sectionIndex(C.Leader.lastName, "ASC")
-                                   .order(C.Leader.fullName, "ASC");
+            if (mSortId == R.id.menu_leader_sort_count) {
+                setBinCount(7);
+                showHeaders(false);
+                return C.Leader.selectList(C.Leader.fullName, C.Leader.leadCount)
+                        .sectionIndex(C.Leader.leadCount, "DESC")
+                        .order(C.Leader.lastName, "ASC", C.Leader.fullName, "ASC");
+            } else if (mSortId == R.id.menu_leader_sort_entropy) {
+                setBins(0, 10, 20, 30, 40, 50, 60, 70, 80, 90);
+                setSectionLabels("0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9");
+                showHeaders(false);
+                return C.Leader.selectList(C.Leader.fullName, C.Leader.entropyDisplay)
+                        .sectionIndex(C.Leader.entropy.format("CAST({column} * 100 AS INT)"), "DESC")
+                        .order(C.Leader.entropy, "DESC",
+                                C.Leader.lastName, "ASC",
+                                C.Leader.fullName, "ASC");
+            } else if (mSortId == R.id.menu_leader_sort_first_name) {
+                setAlphabetIndexer();
+                showHeaders(true);
+                return C.Leader.selectList(C.Leader.fullName, C.Leader.leadCount)
+                        .sectionIndex(C.Leader.fullName, "ASC");
+            } else {
+                setAlphabetIndexer();
+                showHeaders(true);
+                return C.Leader.selectList(C.Leader.fullName, C.Leader.leadCount)
+                        .sectionIndex(C.Leader.lastName, "ASC")
+                        .order(C.Leader.fullName, "ASC");
             }
         }
 
@@ -302,35 +300,35 @@ public class MainActivity extends SimpleTabActivity {
         // Change query/index based on the selected sort column
         public SQL.Query onUpdateQuery() {
             SQL.Query query = songQuery();
-            switch(getSortId()) {
-                default:
-                case R.id.menu_song_sort_page:
-                    setBins(0, 100, 200, 300, 400, 500);
-                    showHeaders(false);
-                    return query.sectionIndex(C.Song.pageSort);
-                case R.id.menu_song_sort_title:
-                    setAlphabetIndexer();
-                    showHeaders(true);
-                    return query.sectionIndex(C.Song.title, "ASC");
-                case R.id.menu_song_sort_leads:
-                    setBinCount(7);
-                    showHeaders(false);
-                    return query.sectionIndex(C.SongStats.leadCount.sum(), "DESC");
-                case R.id.menu_song_sort_key:
-                    setStringIndexer();
-                    showHeaders(true);
-                    return query.sectionIndex(C.Song.key, "ASC");
-                case R.id.menu_song_sort_time:
-                    setStringIndexer();
-                    showHeaders(true);
-                    return query.sectionIndex(C.Song.time, "ASC");
-                case R.id.menu_song_sort_meter:
-                    setStringIndexer();
-                    showHeaders(true);
-                    return query.sectionIndex(C.Song.meter)
-                                .orderAsc(C.Song.meter.cast("INT"))
-                                .orderAsc(C.Song.meter);
-
+            int sortId = getSortId();
+            if (sortId == R.id.menu_song_sort_title) {
+                setAlphabetIndexer();
+                showHeaders(true);
+                return query.sectionIndex(C.Song.title, "ASC");
+            } else if (sortId == R.id.menu_song_sort_leads) {
+                setBinCount(7);
+                showHeaders(false);
+                return query.sectionIndex(C.SongStats.leadCount.sum(), "DESC");
+            } else if (sortId == R.id.menu_song_sort_key) {
+                setStringIndexer();
+                showHeaders(true);
+                return query.sectionIndex(C.Song.key, "ASC");
+            } else if (sortId == R.id.menu_song_sort_time) {
+                setStringIndexer();
+                showHeaders(true);
+                return query.sectionIndex(C.Song.time, "ASC");
+            } else if (sortId == R.id.menu_song_sort_meter) {
+                setStringIndexer();
+                showHeaders(true);
+                return query.sectionIndex(C.Song.meter)
+                        .orderAsc(C.Song.meter.cast("INT"))
+                        .orderAsc(C.Song.meter);
+            } else {
+                // Weirdly, there didn't used to be a default.
+                // To keep things simple here, make the default page sort.
+                setBins(0, 100, 200, 300, 400, 500);
+                showHeaders(false);
+                return query.sectionIndex(C.Song.pageSort);
             }
         }
 
@@ -342,31 +340,27 @@ public class MainActivity extends SimpleTabActivity {
             showHeaders(true);
             setStringIndexer();
             // Add custom sorting options
-            switch(getSortId()) {
-                default:
-                case R.id.menu_song_sort_page:
-                    query.order(C.Song.pageSort, "ASC");
-                    break;
-                case R.id.menu_song_sort_title:
-                    query.order(C.Song.title, "ASC");
-                    break;
-                case R.id.menu_song_sort_leads:
-                    query.order(C.SongStats.leadCount.sum(), "DESC");
-                    break;
-                case R.id.menu_song_sort_key:
-                    query.order(C.Song.key, "ASC")
-                         .sectionIndex(searchColumn(searchTerm, C.Song.key, "Composer", "Poet", "Words"));
-                    break;
-                case R.id.menu_song_sort_time:
-                    query.order(C.Song.time, "ASC")
-                         .sectionIndex(searchColumn(searchTerm, C.Song.time, "Composer", "Poet", "Words"));
-                    break;
-                case R.id.menu_song_sort_meter:
-                    setStringIndexer();
-                    query.orderAsc(C.Song.meter.cast("INT"))
-                         .orderAsc(C.Song.meter)
-                         .sectionIndex(searchColumn(searchTerm, C.Song.meter, "Composer", "Poet", "Words"));
-                    break;
+            int sortId = getSortId();
+            if (sortId == R.id.menu_song_sort_page) {
+                query.order(C.Song.pageSort, "ASC");
+            } else if (sortId == R.id.menu_song_sort_title) {
+                query.order(C.Song.title, "ASC");
+            } else if (sortId == R.id.menu_song_sort_leads) {
+                query.order(C.SongStats.leadCount.sum(), "DESC");
+            } else if (sortId == R.id.menu_song_sort_key) {
+                query.order(C.Song.key, "ASC")
+                        .sectionIndex(searchColumn(searchTerm, C.Song.key, "Composer", "Poet", "Words"));
+            } else if (sortId == R.id.menu_song_sort_time) {
+                query.order(C.Song.time, "ASC")
+                        .sectionIndex(searchColumn(searchTerm, C.Song.time, "Composer", "Poet", "Words"));
+            } else if (sortId == R.id.menu_song_sort_meter) {
+                setStringIndexer();
+                query.orderAsc(C.Song.meter.cast("INT"))
+                        .orderAsc(C.Song.meter)
+                        .sectionIndex(searchColumn(searchTerm, C.Song.meter, "Composer", "Poet", "Words"));
+            } else {
+                // There didn't used to be a default, make the default page sort asc
+                query.order(C.Song.pageSort, "ASC");
             }
             // Add the standard search index if none has been added
             if (!query.hasSectionIndex())
@@ -419,19 +413,17 @@ public class MainActivity extends SimpleTabActivity {
         }
 
         public SQL.Query onUpdateQuery() {
-            switch(mSortId) {
-                case R.id.menu_singing_sort_recordings:
+                if (mSortId == R.id.menu_singing_sort_recordings) {
                     showHeaders(false);
                     return singingQuery().where(C.Singing.recordingCount, ">", "0")
-                                         .orderDesc(C.Singing.recordingCount)
-                                         .orderAsc(C.Singing.year);
-                case R.id.menu_singing_sort_year:
-                default:
+                            .orderDesc(C.Singing.recordingCount)
+                            .orderAsc(C.Singing.year);
+                } else {
                     setRangeIndexer();
                     showHeaders(true);
                     return singingQuery().sectionIndex(C.Singing.year);
+                }
             }
-        }
 
         @Override
         public SQL.Query onUpdateSearch(SQL.Query query, String searchTerm) {

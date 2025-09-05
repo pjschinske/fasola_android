@@ -55,11 +55,7 @@ public class ConnectionStatus {
         NetworkInfo network = cm.getActiveNetworkInfo();
         if (network != null && network.isConnectedOrConnecting()) {
             if (network.getType() == ConnectivityManager.TYPE_WIFI) {
-                if (! BuildConfig.DEBUG)
-                    return CAN_PLAY;
-                else {
-                    return Debug.SIMULATE_NO_WIFI ? NO_WIFI : CAN_PLAY;
-                }
+                return CAN_PLAY;
             }
             else
                 return NO_WIFI;

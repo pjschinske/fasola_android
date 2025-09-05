@@ -207,14 +207,12 @@ public class LeaderActivity extends SimpleTabActivity {
                     C.Song.selectList(C.Song.number, C.Song.fullTitle, C.LeaderStats.leadCount)
                             .where(C.LeaderStats.leaderId, "=", mId);
             // Sort
-            switch (mSortId) {
-                case R.id.menu_song_sort_page:
-                    return query.order(C.Song.pageSort);
-                case R.id.menu_song_sort_title:
-                    return query.order(C.Song.title);
-                case R.id.menu_song_sort_leads:
-                default:
-                    return query.order(C.LeaderStats.leadCount, "DESC", C.Song.pageSort, "ASC");
+           if (mSortId == R.id.menu_song_sort_page) {
+               return query.order(C.Song.pageSort);
+           } else if (mSortId == R.id.menu_song_sort_title) {
+               return query.order(C.Song.title);
+           } else {
+               return query.order(C.LeaderStats.leadCount, "DESC", C.Song.pageSort, "ASC");
             }
         }
 
@@ -284,17 +282,16 @@ public class LeaderActivity extends SimpleTabActivity {
                             .select(C.SongLeader.leadId).as(SingingActivity.EXTRA_LEAD_ID)
                             .select(C.SongLeader.audioUrl).as(CursorListFragment.AUDIO_COLUMN)
                             .where(C.SongLeader.leaderId, "=", mId);
-            switch(mSortId) {
-                case R.id.menu_song_sort_title:
+                if (mSortId == R.id.menu_song_sort_title) {
                     setStringIndexer();
                     return query.sectionIndex(C.Song.fullTitle, "ASC")
-                                .order(C.Singing.year, "ASC");
-                case R.id.menu_song_sort_page:
+                            .order(C.Singing.year, "ASC");
+                }
+                else if (mSortId == R.id.menu_song_sort_page) {
                     setStringIndexer();
                     return query.sectionIndex(C.Song.fullName)
-                                .order(C.Song.pageSort, "ASC", C.Singing.year, "ASC");
-                case R.id.menu_singing_sort_year:
-                default:
+                            .order(C.Song.pageSort, "ASC", C.Singing.year, "ASC");
+                } else {
                     setRangeIndexer();
                     return query.sectionIndex(C.Singing.year, "ASC");
             }
