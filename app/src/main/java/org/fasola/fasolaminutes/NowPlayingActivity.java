@@ -8,7 +8,7 @@ package org.fasola.fasolaminutes;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,32 +60,37 @@ public class NowPlayingActivity extends SimpleTabActivity {
     PlaylistObserver mObserver = new PlaylistObserver() {
         @Override
         public void onChanged() {
-            mController.show(0); // Update seekbar
-            PlaybackService service = PlaybackService.getInstance();
-            Playlist.Song song;
-            if (service != null)
-                song = service.getSong();
-            else
-                song = Playlist.getInstance().getCurrent();
-            if (song != null) {
-                setTitle(song.name);
-                // Update fragments
-                if (song != mSong) {
-                    mSong = song;
-                    List<Fragment> fragments = getSupportFragmentManager().getFragments();
-                    if (fragments != null)
-                        for (Fragment fragment : fragments) {
-                            if (fragment instanceof SongActivity.SongFragment)
-                                ((SongActivity.SongFragment) fragment).setSongId(mSong.songId);
-                            else if (fragment instanceof NowPlayingInfoFragment)
-                                ((NowPlayingInfoFragment) fragment).setLeadId(mSong.leadId);
-                        }
+            if (mController != null) {
+                try {
+                    mController.show(0); // Update seekbar
+                } catch(NullPointerException npe) {
+                    // just catch this for now since it's unclear what's null
                 }
-                setProgressBarIndeterminateVisibility(service != null && service.isLoading());
-            }
-            else {
-                mSong = null;
-                setProgressBarIndeterminateVisibility(false);
+                PlaybackService service = PlaybackService.getInstance();
+                Playlist.Song song;
+                if (service != null)
+                    song = service.getSong();
+                else
+                    song = Playlist.getInstance().getCurrent();
+                if (song != null) {
+                    setTitle(song.name);
+                    // Update fragments
+                    if (song != mSong) {
+                        mSong = song;
+                        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                        if (fragments != null)
+                            for (Fragment fragment : fragments) {
+                                if (fragment instanceof SongActivity.SongFragment)
+                                    ((SongActivity.SongFragment) fragment).setSongId(mSong.songId);
+                                else if (fragment instanceof NowPlayingInfoFragment)
+                                    ((NowPlayingInfoFragment) fragment).setLeadId(mSong.leadId);
+                            }
+                    }
+                    setProgressBarIndeterminateVisibility(service != null && service.isLoading());
+                } else {
+                    mSong = null;
+                    setProgressBarIndeterminateVisibility(false);
+                }
             }
         }
 

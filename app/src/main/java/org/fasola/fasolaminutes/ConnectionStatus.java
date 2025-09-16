@@ -15,9 +15,9 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -55,11 +55,7 @@ public class ConnectionStatus {
         NetworkInfo network = cm.getActiveNetworkInfo();
         if (network != null && network.isConnectedOrConnecting()) {
             if (network.getType() == ConnectivityManager.TYPE_WIFI) {
-                if (! BuildConfig.DEBUG)
-                    return CAN_PLAY;
-                else {
-                    return Debug.SIMULATE_NO_WIFI ? NO_WIFI : CAN_PLAY;
-                }
+                return CAN_PLAY;
             }
             else
                 return NO_WIFI;

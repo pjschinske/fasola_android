@@ -7,12 +7,12 @@ package org.fasola.fasolaminutes;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.InflateException;
@@ -31,7 +31,7 @@ import java.util.Map;
 
 /**
  *  A base class for an activity with tabs.
- *  Use {@link android.support.v4.view.ViewPager} in the layout file, and define tabs using
+ *  Use {@link ViewPager} in the layout file, and define tabs using
  *  {@code <fragment android:title="label" android:name="FragmentClass">}
  */
 public abstract class SimpleTabActivity extends BaseActivity {

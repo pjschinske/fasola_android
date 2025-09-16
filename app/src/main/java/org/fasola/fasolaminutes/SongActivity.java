@@ -7,7 +7,7 @@ package org.fasola.fasolaminutes;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -193,17 +193,15 @@ public class SongActivity extends SimpleTabActivity {
         }
 
         private SQL.Query getChartQuery() {
-            switch (mGraphSettingId) {
-                case R.id.menu_graph_percent_leads:
-                    return C.SongStats.select(C.SongStats.year, C.SongStats.leadPercent)
+            if (mGraphSettingId == R.id.menu_graph_percent_leads) {
+                return C.SongStats.select(C.SongStats.year, C.SongStats.leadPercent)
                         .whereEq(C.SongStats.songId)
                         .order(C.SongStats.year, "ASC");
-                case R.id.menu_graph_song_rank:
-                    return C.SongStats.select(C.SongStats.year, C.SongStats.rank)
+            } else if (mGraphSettingId == R.id.menu_graph_song_rank) {
+                return C.SongStats.select(C.SongStats.year, C.SongStats.rank)
                         .whereEq(C.SongStats.songId)
                         .order(C.SongStats.year, "ASC");
-                case R.id.menu_graph_leads_per_year:
-                default:
+            } else {
                     return C.SongStats.select(C.SongStats.year, C.SongStats.leadCount)
                         .whereEq(C.SongStats.songId)
                         .order(C.SongStats.year, "ASC");
@@ -228,16 +226,13 @@ public class SongActivity extends SimpleTabActivity {
                     }
                     CombinedData data = new CombinedData(xVals);
                     // by graph
-                    switch (mGraphSettingId) {
-                        case R.id.menu_graph_song_rank:
-                            LineDataSet lineDataSet = new LineDataSet(entries, "");
-                            lineDataSet.setDrawCircles(false);
-                            lineDataSet.setLineWidth(2);
-                            data.setData(new LineData(xVals, lineDataSet));
-                            return data;
-                        case R.id.menu_graph_percent_leads:
-                        case R.id.menu_graph_leads_per_year:
-                        default:
+                    if (mGraphSettingId == R.id.menu_graph_song_rank) {
+                        LineDataSet lineDataSet = new LineDataSet(entries, "");
+                        lineDataSet.setDrawCircles(false);
+                        lineDataSet.setLineWidth(2);
+                        data.setData(new LineData(xVals, lineDataSet));
+                        return data;
+                    } else {
                             // Bar graphs need a BarEntry array
                             ArrayList<BarEntry> barEntries = new ArrayList<>();
                             for (Entry entry : entries)
@@ -253,15 +248,14 @@ public class SongActivity extends SimpleTabActivity {
                     chart.getAxisLeft().resetAxisMinValue();
                     chart.getAxisLeft().setInverted(false);
                     // Graph-specific styles
-                    switch (mGraphSettingId) {
-                        case R.id.menu_graph_song_rank:
-                            chart.getAxisLeft().setAxisMaxValue(C.SONG_COUNT);
-                            chart.getAxisLeft().setAxisMinValue(1);
-                            chart.getAxisLeft().setInverted(true);
-                            break;
+                    if (mGraphSettingId == R.id.menu_graph_song_rank) {
+                                chart.getAxisLeft().setAxisMaxValue(C.SONG_COUNT);
+                                chart.getAxisLeft().setAxisMinValue(1);
+                                chart.getAxisLeft().setInverted(true);
+                    } else {
+                        // Global styles
+                        MinutesApplication.applyDefaultChartStyle(chart);
                     }
-                    // Global styles
-                    MinutesApplication.applyDefaultChartStyle(chart);
                 }
 
                 @Override
